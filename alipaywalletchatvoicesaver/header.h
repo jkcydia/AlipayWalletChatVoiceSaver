@@ -8,8 +8,5 @@
 - (void)collectMenu:(id)arg1;
 - (void)evt_alert:(id)msg;
 @property(retain, nonatomic) APChatMedia *voiceObj; // @synthesize voiceObj=_voiceObj;
-- (void)evt_onCopyURL;
-- (void)evt_onSaveToDiskAndUpload;
-
 @end
 
