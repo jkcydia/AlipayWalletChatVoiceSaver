@@ -37,6 +37,7 @@ the generation of a class list and an automatic constructor.
 #import <substrate.h>
 #import <mach-o/dyld.h>
 #import <dlfcn.h>
+#import "header.h"
 
 
 /*
@@ -78,7 +79,40 @@ static int newptrace(int request, pid_t pid, caddr_t addr, int data){
 	MSHookFunction((void *)MSFindSymbol(NULL,"_ptrace"), (void *)newptrace, (void **)&oldptrace);
 }
 
+%hook CTMessageCell
 
+%new
+- (void)evt_alert:(id)msg{
+	UIAlertView * alert =[[UIAlertView alloc ] initWithTitle:@""
+                                                message:[NSString stringWithFormat:@"%@",msg]
+                                                delegate:self
+                                                cancelButtonTitle:@"OK"
+                                                otherButtonTitles: nil];
+    [alert show];
+}
+
+%new
+- (void)evt_onSaveToDiskAndUpload{
+
+}
+
+%new
+- (void)evt_onCopyURL{
+	UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+	pasteboard.string = self.voiceObj.url;
+
+	[self evt_alert:pasteboard.string];
+}
+
+- (void)collectMenu:(id)arg1{
+	
+	self.backgroundColor = [UIColor greenColor];
+
+	[self evt_onCopyURL];
+}
+
+
+%end
 
 
 

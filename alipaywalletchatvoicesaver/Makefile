@@ -6,6 +6,8 @@ include theos/makefiles/common.mk
 
 TWEAK_NAME = alipaywalletchatvoicesaver
 alipaywalletchatvoicesaver_FILES = Tweak.xm
+alipaywalletchatvoicesaver_FRAMEWORKS = UIKit
+
 
 include $(THEOS_MAKE_PATH)/tweak.mk
 
