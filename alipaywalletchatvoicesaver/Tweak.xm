@@ -132,8 +132,11 @@ static APVoiceManager *s_voiceManager;
     	return;
     }
     NSString *dispalyName = [chatData objectForKey:@"displayName"];
-    NSString *timeLineString = [NSString stringWithFormat:@"%@",[chatData objectForKey:@"timeLine"]];
-    timeLineString = [timeLineString stringByReplacingOccurrencesOfString:@"+0000" withString:@""];
+
+	NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateStyle:kCFDateFormatterFullStyle];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    NSString *timeLineString = [dateFormatter stringFromDate:[chatData objectForKey:@"timeLine"]]; 
 
 	NSData *voiceData = [s_voiceManager.voiceCache queryVoiceDataForKey:self.voiceObj.url formatType:1];
 
