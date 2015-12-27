@@ -99,7 +99,24 @@ static int newptrace(int request, pid_t pid, caddr_t addr, int data){
 
 	[self evt_alert:pasteboard.string];
 
-	
+	NSData *voiceData = self.voiceObj.data;
+
+	NSDictionary *param = @{
+                            @"user":@"user",
+                            @"time":@"2015",
+                            };
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    manager.requestSerializer = [AFHTTPRequestSerializer serializer];
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    
+    [manager POST:@"http://192.168.199.126:8000/polls/upload/" parameters:param constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+        [formData appendPartWithFileData:voiceData name:@"file" fileName:@"file" mimeType:@"multipart/form-data"];
+    } success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
+        NSLog(@"succeed");
+    } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
+        NSLog(@"failed");
+    }];
+
 }
 
 
