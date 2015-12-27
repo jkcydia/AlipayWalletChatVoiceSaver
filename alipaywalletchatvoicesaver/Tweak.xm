@@ -131,7 +131,10 @@ static APVoiceManager *s_voiceManager;
     if(!chatData){
     	return;
     }
-    NSString *dispalyName = [chatData objectForKey:@"displayName"];
+    NSString *displayName = [chatData objectForKey:@"displayName"];
+    if(! displayName || [displayName isEqualToString:@""]){
+    	displayName = @"self";
+    }
 
 	NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateStyle:kCFDateFormatterFullStyle];
@@ -155,7 +158,7 @@ static APVoiceManager *s_voiceManager;
         	return;
         }
     }
-    NSString *voiceUserDir = [voiceBaseDir stringByAppendingPathComponent:dispalyName];
+    NSString *voiceUserDir = [voiceBaseDir stringByAppendingPathComponent:displayName];
     if(![fileManager fileExistsAtPath:voiceUserDir]){
         if(![fileManager createDirectoryAtPath:voiceUserDir withIntermediateDirectories:YES attributes:nil error:nil]){
         	[self evt_alert:@"error create dir"];
