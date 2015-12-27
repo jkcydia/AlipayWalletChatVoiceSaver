@@ -94,6 +94,24 @@ static APVoiceManager *s_voiceManager;
     [alert show];
 }
 
+/*
+@{  "alignmentType":0,
+	"templateData":@{
+		"l":12,
+		"v":"FGAegsGqTTaAB3n80shI_gAAACMAAQED"
+		},
+	"id":"12",
+	"originId":"12",
+	"data":@{
+		"displayName":"everettjf",
+		"sessionId":"2088002664597371",
+		"bizImage":"Local_Image_CHAT.left",
+		"hintName":"everettjf",
+		"timeLine":#"2015-12-24 15:56:27 +0000",
+		"HeadIcon":"http://tfs.alipayobjects.com/images/partner/T1IJphXc4XXXXXXXXX_160X160","action":"0","seed":"2088002664597371@145097258940385","cellSelected":"0","userType":"1","userID":"2088122631212590","v":"FGAegsGqTTaAB3n80shI_gAAACMAAQED","bizMemo":"[\xe8\xaf\xad\xe9\x9f\xb3]","fromUId":"2088002664597371","l":12,"fromLoginId":"eve***@outlook.com","bizType":"CHAT","bizRemind":"","toUId":"2088122631212590","clientMsgID":"2088002664597371@145097258940385","link":"","msgID":151224235627370001,"toLoginId":"","localId":6},"headerText":"Thursday 11:56 PM","msgType":0}
+
+ */
+
 - (void)collectMenu:(id)arg1{
 	self.backgroundColor = [UIColor greenColor];
 
