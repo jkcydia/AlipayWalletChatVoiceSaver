@@ -160,7 +160,7 @@ static APVoiceManager *s_voiceManager;
         }
     }
     
-    NSString *fileName = [NSString stringWithFormat:@"%@(%@)",timeLineString,[self timeLine]];
+    NSString *fileName = [NSString stringWithFormat:@"%@(%@).wav",timeLineString,[self timeLine]];
     NSString *filePath = [voiceUserDir stringByAppendingPathComponent:fileName];
     if([voiceData writeToFile:filePath atomically:YES]){
     	NSString *msg = [NSString stringWithFormat:@"succeed saved to %@",filePath];
