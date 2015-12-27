@@ -123,6 +123,17 @@ static APVoiceManager *s_voiceManager;
 		[self evt_alert:@"voice manager null"];
 		return;
 	}
+    NSDictionary *chatDataSource = self.chatDataSource;
+    if(!chatDataSource){
+    	return;
+    }
+    NSDictionary *chatData = [chatDataSource objectForKey:@"data"];
+    if(!chatData){
+    	return;
+    }
+    NSString *dispalyName = [chatData objectForKey:@"displayName"];
+    NSString *timeLineString = [NSString stringWithFormat:@"%@",[chatData objectForKey:@"timeLine"]];
+    timeLineString = [timeLineString stringByReplacingOccurrencesOfString:@"+0000" withString:@""];
 
 	NSData *voiceData = [s_voiceManager.voiceCache queryVoiceDataForKey:self.voiceObj.url formatType:1];
 
@@ -134,15 +145,23 @@ static APVoiceManager *s_voiceManager;
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSURL *url = (id)[[fileManager URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] firstObject];
     
-    NSString *voiceDir = [[url path] stringByAppendingPathComponent:@"voice"];
-    if(![fileManager fileExistsAtPath:voiceDir]){
-        if(![fileManager createDirectoryAtPath:voiceDir withIntermediateDirectories:YES attributes:nil error:nil]){
+    NSString *voiceBaseDir = [[url path] stringByAppendingPathComponent:@"voice"];
+    if(![fileManager fileExistsAtPath:voiceBaseDir]){
+        if(![fileManager createDirectoryAtPath:voiceBaseDir withIntermediateDirectories:YES attributes:nil error:nil]){
+        	[self evt_alert:@"error create dir"];
+        	return;
+        }
+    }
+    NSString *voiceUserDir = [voiceBaseDir stringByAppendingPathComponent:dispalyName];
+    if(![fileManager fileExistsAtPath:voiceUserDir]){
+        if(![fileManager createDirectoryAtPath:voiceUserDir withIntermediateDirectories:YES attributes:nil error:nil]){
         	[self evt_alert:@"error create dir"];
         	return;
         }
     }
     
-    NSString *filePath = [voiceDir stringByAppendingPathComponent:@"voicedata.wav"];
+    NSString *fileName = [NSString stringWithFormat:@"%@(%@)",timeLineString,[self timeLine]];
+    NSString *filePath = [voiceUserDir stringByAppendingPathComponent:fileName];
     if([voiceData writeToFile:filePath atomically:YES]){
     	NSString *msg = [NSString stringWithFormat:@"succeed saved to %@",filePath];
     	[self evt_alert:msg];

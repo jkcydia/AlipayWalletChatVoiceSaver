@@ -11,6 +11,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)collectMenu:(id)arg1;
 - (void)evt_alert:(id)msg;
 @property(retain, nonatomic) APChatMedia *voiceObj; // @synthesize voiceObj=_voiceObj;
+@property(retain, nonatomic) NSDictionary *chatDataSource; // @synthesize chatDataSource=_chatDataSource;
+@property(copy, nonatomic) NSString *timeLine; // @synthesize timeLine=_timeLine;
+
 @end
 
 @interface VoiceCache : NSObject
