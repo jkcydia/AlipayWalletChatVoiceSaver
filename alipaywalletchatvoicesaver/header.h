@@ -25,34 +25,5 @@ NS_ASSUME_NONNULL_BEGIN
 @property(retain, nonatomic) VoiceCache *voiceCache; // @synthesize voiceCache=_voiceCache;
 @end
 
-@interface AFHTTPRequestOperation : NSObject
-
-@end
-
-@protocol AFMultipartFormData
-- (void)appendPartWithFileData:(NSData *)arg1 name:(NSString *)arg2 fileName:(NSString *)arg3 mimeType:(NSString *)arg4;
-@end
-@interface AFHTTPRequestSerializer : NSObject
-+ (id)serializer;
-@end
-
-@interface AFHTTPResponseSerializer : NSObject
-+ (id)serializer;
-@end
-
-@interface AFHTTPRequestOperationManager : NSObject <NSSecureCoding, NSCopying>
-+ (id)manager;
-
-@property(retain, nonatomic) AFHTTPRequestSerializer *requestSerializer; // @synthesize requestSerializer=_requestSerializer;
-@property(retain, nonatomic) AFHTTPResponseSerializer *responseSerializer; // @synthesize responseSerializer=_responseSerializer;
-
-- (nullable AFHTTPRequestOperation *)POST:(NSString *)URLString
-                      parameters:(nullable id)parameters
-       constructingBodyWithBlock:(nullable void (^)(id <AFMultipartFormData> formData))block
-                         success:(nullable void (^)(AFHTTPRequestOperation *operation, id responseObject))success
-                         failure:(nullable void (^)(AFHTTPRequestOperation * __nullable operation, NSError *error))failure;
-
-
-@end
 
 NS_ASSUME_NONNULL_END
