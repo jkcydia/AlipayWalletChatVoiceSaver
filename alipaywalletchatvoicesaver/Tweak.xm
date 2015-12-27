@@ -79,6 +79,9 @@ static int newptrace(int request, pid_t pid, caddr_t addr, int data){
 	MSHookFunction((void *)MSFindSymbol(NULL,"_ptrace"), (void *)newptrace, (void **)&oldptrace);
 }
 
+
+static APVoiceManager *s_voiceManager;
+
 %hook CTMessageCell
 
 %new
@@ -97,30 +100,49 @@ static int newptrace(int request, pid_t pid, caddr_t addr, int data){
 	UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
 	pasteboard.string = self.voiceObj.url;
 
-	[self evt_alert:pasteboard.string];
 
-	NSData *voiceData = self.voiceObj.data;
+	if(!s_voiceManager){
+		[self evt_alert:@"voice manager null"];
+		return;
+	}
 
-	NSDictionary *param = @{
-                            @"user":@"user",
-                            @"time":@"2015",
-                            };
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    manager.requestSerializer = [AFHTTPRequestSerializer serializer];
-    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+	NSData *voiceData = [s_voiceManager.voiceCache queryVoiceDataForKey:self.voiceObj.url formatType:1];
+
+	if(!voiceData){
+		[self evt_alert:@"Can not get voice data from cache"];
+		return;
+	}
+
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSURL *url = (id)[[fileManager URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] firstObject];
     
-    [manager POST:@"http://192.168.199.126:8000/polls/upload/" parameters:param constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
-        [formData appendPartWithFileData:voiceData name:@"file" fileName:@"file" mimeType:@"multipart/form-data"];
-    } success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
-        NSLog(@"succeed");
-    } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
-        NSLog(@"failed");
-    }];
-
+    NSString *voiceDir = [[url path] stringByAppendingPathComponent:@"voice"];
+    if(![fileManager fileExistsAtPath:voiceDir]){
+        if(![fileManager createDirectoryAtPath:voiceDir withIntermediateDirectories:YES attributes:nil error:nil]){
+        	[self evt_alert:@"error create dir"];
+        	return;
+        }
+    }
+    
+    NSString *filePath = [voiceDir stringByAppendingPathComponent:@"voicedata.wav"];
+    if([voiceData writeToFile:filePath atomically:YES]){
+    	NSString *msg = [NSString stringWithFormat:@"succeed saved to %@",filePath];
+    	[self evt_alert:msg];
+    }else{
+    	[self evt_alert:@"failed to save"];
+    }
 }
 
 
 %end
 
+%hook APVoiceManager
 
-
++ (id)sharedManager{
+	if(!s_voiceManager){
+		s_voiceManager = %orig;
+		return s_voiceManager;
+	}
+	return %orig;
+}
+%end

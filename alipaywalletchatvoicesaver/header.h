@@ -13,7 +13,14 @@ NS_ASSUME_NONNULL_BEGIN
 @property(retain, nonatomic) APChatMedia *voiceObj; // @synthesize voiceObj=_voiceObj;
 @end
 
+@interface VoiceCache : NSObject
+- (id)queryVoiceDataForKey:(id)arg1 formatType:(unsigned int)arg2;
+@end
 
+@interface APVoiceManager : NSObject
++ (id)sharedManager;
+@property(retain, nonatomic) VoiceCache *voiceCache; // @synthesize voiceCache=_voiceCache;
+@end
 
 @interface AFHTTPRequestOperation : NSObject
 
